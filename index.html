@@ -596,10 +596,6 @@
                                 <option value="manufacturing">Manufacturing</option>
                                 <option value="consulting">Consulting</option>
                                 <option value="retail">Retail</option>
-                                 <option value="media">Media</option>
-                                <option value="legal">Legal</option>
-                                <option value="entertainment">Entertainment</option>
-                                <option value="startups">Startups</option>
                                 <option value="other">Other</option>
                             </select>
                         </div>
@@ -630,12 +626,8 @@
                         </div>
                         <div class="importance-value" id="coachIndustryExpValue">5</div>
                     </div>
-                        </div>
-                        <div class="importance-slider">
-                            <input type="range" min="1" max="10" value="5" id="coachExpImportance" oninput="updateImportance('coachExpImportance', 'coachExpValue')">
-                        </div>
-                        <div class="importance-value" id="coachExpValue">5</div>
-                    </div>
+
+                    
 
                     <div class="trait-row">
                         <div class="trait-name">Certification Level</div>
@@ -849,7 +841,6 @@
                 expertise: getTraitValue('coachExpertise'),
                 industry: getTraitValue('coachIndustry'),
                 industryExperience: getTraitValue('coachIndustryExperience'),
-                experience: getTraitValue('coachExperience'),
                 certification: getTraitValue('coachCertification'),
                 notes: ''
             };
@@ -869,7 +860,7 @@
         function clearCoachForm() {
             const ids = [
                 'coachName','coachCommunication','coachMethodology','coachChallengeLevel',
-                'coachExpertise','coachIndustry','coachIndustryExperience','coachExperience','coachCertification'
+                'coachExpertise','coachIndustry','coachIndustryExperience','coachCertification'
             ];
             ids.forEach(id => {
                 const el = document.getElementById(id);
@@ -913,7 +904,6 @@
                             <strong>Expertise:</strong> ${c.expertise || '-'} ·
                             <strong>Industry:</strong> ${c.industry || '-'} ·
                             <strong>Industry Exp:</strong> ${c.industryExperience || '-'} ·
-                            <strong>Experience:</strong> ${c.experience || '-'} ·
                             <strong>Cert:</strong> ${c.certification || '-'}
                         </div>
                     </div>
@@ -1014,12 +1004,12 @@
                 }
             }
 
-            // Experience Level Compatibility
-            const expWeight = weights.experience * getImportanceValue('coachExpImportance');
+            // Industry Experience Compatibility (replaces generic years of experience)
+            const expWeight = weights.experience * getImportanceValue('coachIndustryExpImportance');
             totalWeight += expWeight;
-            if (coach.experience) {
-                const expScore = calculateExperienceScore(coach.experience);
-                totalScore += expWeight * (expScore / 10);
+            if (coach.industryExperience) {
+                const bucketScore = calculateIndustryExperienceScore(coach.industryExperience);
+                totalScore += expWeight * (bucketScore / 10);
             }
 
             // Certification Level
@@ -1117,14 +1107,16 @@
             return clientIntensity === coachChallenge;
         }
 
-        function calculateExperienceScore(experience) {
+        function calculateIndustryExperienceScore(range) {
             const scores = {
-                'junior': 3,
-                'mid': 6,
-                'senior': 8,
-                'expert': 10
+                '1-5': 4,
+                '5-10': 6,
+                '10-15': 7,
+                '15-20': 8,
+                '20-25': 9,
+                '25+': 10
             };
-            return scores[experience] || 5;
+            return scores[range] || 5;
         }
 
         function calculateCertificationScore(certification) {
@@ -1216,7 +1208,7 @@
                             <strong>Challenge Level:</strong> ${match.challengeLevel || 'Not specified'}<br>
                             <strong>Primary Expertise:</strong> ${match.expertise || 'Not specified'}<br>
                             <strong>Industry Background:</strong> ${match.industry || 'Not specified'}<br>
-                            <strong>Experience:</strong> ${match.experience || 'Not specified'}<br>
+                            <strong>Industry Experience:</strong> ${match.industryExperience || 'Not specified'}<br>
                             <strong>Certification:</strong> ${match.certification || 'Not specified'}<br>
                             ${match.notes ? `<strong>Notes:</strong> ${match.notes}<br>` : ''}
                         </div>
