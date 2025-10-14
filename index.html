@@ -609,6 +609,25 @@
                 <div class="trait-category">
                     <h3>Experience & Credentials</h3>
                     <div class="trait-row">
+                        <div class="trait-name">Industry Experience</div>
+                        <div class="trait-select">
+                            <select id="coachIndustryExperience">
+                                <option value="">Select experience</option>
+                                <option value="1-5">1-5 years</option>
+                                <option value="5-10">5-10 years</option>
+                                <option value="10-15">10-15 years</option>
+                                <option value="15-20">15-20 years</option>
+                                <option value="20-25">20-25 years</option>
+                                <option value="25+">25+ years</option>
+                            </select>
+                        </div>
+                        <div class="importance-slider">
+                            <input type="range" min="1" max="10" value="5" id="coachIndustryExpImportance" oninput="updateImportance('coachIndustryExpImportance', 'coachIndustryExpValue')">
+                        </div>
+                        <div class="importance-value" id="coachIndustryExpValue">5</div>
+                    </div>
+
+                    <div class="trait-row">
                         <div class="trait-name">Years of Experience</div>
                         <div class="trait-select">
                             <select id="coachExperience">
@@ -836,6 +855,7 @@
                 challengeLevel: getTraitValue('coachChallengeLevel'),
                 expertise: getTraitValue('coachExpertise'),
                 industry: getTraitValue('coachIndustry'),
+                industryExperience: getTraitValue('coachIndustryExperience'),
                 experience: getTraitValue('coachExperience'),
                 certification: getTraitValue('coachCertification'),
                 notes: ''
@@ -856,7 +876,7 @@
         function clearCoachForm() {
             const ids = [
                 'coachName','coachCommunication','coachMethodology','coachChallengeLevel',
-                'coachExpertise','coachIndustry','coachExperience','coachCertification'
+                'coachExpertise','coachIndustry','coachIndustryExperience','coachExperience','coachCertification'
             ];
             ids.forEach(id => {
                 const el = document.getElementById(id);
@@ -899,6 +919,7 @@
                             <strong>Challenge:</strong> ${c.challengeLevel || '-'} ·
                             <strong>Expertise:</strong> ${c.expertise || '-'} ·
                             <strong>Industry:</strong> ${c.industry || '-'} ·
+                            <strong>Industry Exp:</strong> ${c.industryExperience || '-'} ·
                             <strong>Experience:</strong> ${c.experience || '-'} ·
                             <strong>Cert:</strong> ${c.certification || '-'}
                         </div>
@@ -1131,6 +1152,7 @@
                 decisionMaking: getTraitValue('clientDecisionMaking'),
                 riskTolerance: getTraitValue('clientRiskTolerance'),
                 challenge: getTraitValue('clientChallenge'),
+                seniority: getTraitValue('clientSeniority'),
                 industry: getTraitValue('clientIndustry'),
                 intensity: getTraitValue('clientIntensity'),
                 frequency: getTraitValue('clientFrequency')
