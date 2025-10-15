@@ -455,6 +455,86 @@
             transform: rotate(180deg);
         }
 
+        .edit-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .edit-modal.active {
+            display: flex;
+        }
+
+        .edit-modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .edit-modal h3 {
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #4a9eff;
+            padding-bottom: 10px;
+        }
+
+        .edit-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .edit-form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .edit-form-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .edit-form-group input,
+        .edit-form-group select {
+            padding: 8px 12px;
+            border: 1px solid #d0d0d0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .edit-modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
         @media (max-width: 1400px) {
             .main-content {
                 grid-template-columns: 1fr 1fr;
@@ -968,6 +1048,130 @@
         </div>
     </div>
 
+    <!-- Edit Coach Modal -->
+    <div class="edit-modal" id="editModal">
+        <div class="edit-modal-content">
+            <button class="close-modal" onclick="closeEditModal()">&times;</button>
+            <h3>Edit Coach</h3>
+            <form id="editCoachForm">
+                <div class="edit-form-grid">
+                    <div class="edit-form-group">
+                        <label for="editCoachName">Coach Name</label>
+                        <input type="text" id="editCoachName" required>
+                    </div>
+                    <div class="edit-form-group">
+                        <label for="editCoachCommunication">Communication Approach</label>
+                        <select id="editCoachCommunication">
+                            <option value="">Select approach</option>
+                            <option value="direct">Direct & Authoritative</option>
+                            <option value="collaborative">Collaborative & Inclusive</option>
+                            <option value="analytical">Analytical & Data-driven</option>
+                            <option value="transformational">Transformational & Inspiring</option>
+                        </select>
+                    </div>
+                    <div class="edit-form-group">
+                        <label for="editCoachMethodology">Coaching Methodology</label>
+                        <select id="editCoachMethodology">
+                            <option value="">Select methodology</option>
+                            <option value="structured">Structured & Process-driven</option>
+                            <option value="adaptive">Adaptive & Flexible</option>
+                            <option value="experiential">Experiential & Hands-on</option>
+                            <option value="theoretical">Theoretical & Academic</option>
+                        </select>
+                    </div>
+                    <div class="edit-form-group">
+                        <label for="editCoachChallengeLevel">Challenge Level</label>
+                        <select id="editCoachChallengeLevel">
+                            <option value="">Select level</option>
+                            <option value="gentle">Gentle & Supportive</option>
+                            <option value="moderate">Moderate & Balanced</option>
+                            <option value="intense">Intense & Challenging</option>
+                            <option value="transformational">Transformational & Disruptive</option>
+                        </select>
+                    </div>
+                    <div class="edit-form-group">
+                        <label for="editCoachExpertise">Primary Expertise</label>
+                        <select id="editCoachExpertise">
+                            <option value="">Select expertise</option>
+                            <option value="leadership">Leadership Development</option>
+                            <option value="strategy">Strategic Thinking</option>
+                            <option value="team">Team Building</option>
+                            <option value="change">Change Management</option>
+                            <option value="performance">Performance Improvement</option>
+                            <option value="communication">Communication Skills</option>
+                        </select>
+                    </div>
+                    <div class="edit-form-group">
+                        <label for="editCoachIndustry">Industry Background</label>
+                        <select id="editCoachIndustry">
+                            <option value="">Select industry</option>
+                            <option value="technology">Technology</option>
+                            <option value="finance">Finance</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="consulting">Consulting</option>
+                            <option value="retail">Retail</option>
+                            <option value="media">Media</option>
+                            <option value="legal">Legal</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="startups">Startups</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="edit-form-group">
+                        <label for="editCoachYearsExperience">Years of Experience</label>
+                        <select id="editCoachYearsExperience">
+                            <option value="">Select experience</option>
+                            <option value="1-5">1-5 years</option>
+                            <option value="5-10">5-10 years</option>
+                            <option value="10-15">10-15 years</option>
+                            <option value="15-20">15-20 years</option>
+                            <option value="20-25">20-25 years</option>
+                            <option value="25+">25+ years</option>
+                        </select>
+                    </div>
+                    <div class="edit-form-group">
+                        <label for="editCoachCertification">Certification Level</label>
+                        <select id="editCoachCertification">
+                            <option value="">Select certification</option>
+                            <option value="basic">Basic Certification</option>
+                            <option value="advanced">Advanced Certification</option>
+                            <option value="master">Master Level</option>
+                            <option value="phd">PhD/Doctorate</option>
+                        </select>
+                    </div>
+                    <div class="edit-form-group">
+                        <label for="editCoachMaxClients">Max Clients</label>
+                        <select id="editCoachMaxClients">
+                            <option value="">Select capacity</option>
+                            <option value="1-3">1-3 clients</option>
+                            <option value="4-6">4-6 clients</option>
+                            <option value="7-10">7-10 clients</option>
+                            <option value="11-15">11-15 clients</option>
+                            <option value="16+">16+ clients</option>
+                        </select>
+                    </div>
+                    <div class="edit-form-group">
+                        <label for="editCoachCurrentClients">Current Clients</label>
+                        <select id="editCoachCurrentClients">
+                            <option value="">Select current load</option>
+                            <option value="0">0 clients</option>
+                            <option value="1-2">1-2 clients</option>
+                            <option value="3-5">3-5 clients</option>
+                            <option value="6-8">6-8 clients</option>
+                            <option value="9-12">9-12 clients</option>
+                            <option value="13+">13+ clients</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="edit-modal-buttons">
+                    <button type="button" class="match-button" style="background:linear-gradient(135deg,#6c757d 0%, #868e96 100%);" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="match-button" style="background:linear-gradient(135deg,#28a745 0%, #20c997 100%);">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Sample executive coaches
         const sampleCoaches = [
@@ -1183,7 +1387,8 @@
                                     <div class="detail-value">${c.maxClients || 'Not specified'}</div>
                                 </div>
                             </div>
-                            <div style="margin-top: 15px; text-align: right;">
+                            <div style="margin-top: 15px; display: flex; justify-content: space-between;">
+                                <button class="match-button" style="width:auto; padding:6px 10px; background:linear-gradient(135deg,#28a745 0%, #20c997 100%);" onclick="event.stopPropagation(); editCoach(${idx})">Edit Coach</button>
                                 <button class="match-button" style="width:auto; padding:6px 10px; background:linear-gradient(135deg,#dc3545 0%, #c82333 100%);" onclick="event.stopPropagation(); deleteCoachAt(${idx})">Delete Coach</button>
                             </div>
                         </div>
@@ -1205,6 +1410,83 @@
                 icon.classList.add('expanded');
             }
         }
+
+        let editingCoachIndex = -1;
+
+        function editCoach(index) {
+            const coaches = loadCoaches();
+            const coach = coaches[index];
+            editingCoachIndex = index;
+
+            // Populate the edit form with current coach data
+            document.getElementById('editCoachName').value = coach.name || '';
+            document.getElementById('editCoachCommunication').value = coach.communication || '';
+            document.getElementById('editCoachMethodology').value = coach.methodology || '';
+            document.getElementById('editCoachChallengeLevel').value = coach.challengeLevel || '';
+            document.getElementById('editCoachExpertise').value = coach.expertise || '';
+            document.getElementById('editCoachIndustry').value = coach.industry || '';
+            document.getElementById('editCoachYearsExperience').value = coach.yearsExperience || '';
+            document.getElementById('editCoachCertification').value = coach.certification || '';
+            document.getElementById('editCoachMaxClients').value = coach.maxClients || '';
+            document.getElementById('editCoachCurrentClients').value = coach.currentClients || '';
+
+            // Show the modal
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+            editingCoachIndex = -1;
+        }
+
+        function saveEditedCoach() {
+            if (editingCoachIndex === -1) return;
+
+            const coaches = loadCoaches();
+            const coach = coaches[editingCoachIndex];
+
+            // Update coach data
+            coach.name = document.getElementById('editCoachName').value.trim();
+            coach.communication = document.getElementById('editCoachCommunication').value;
+            coach.methodology = document.getElementById('editCoachMethodology').value;
+            coach.challengeLevel = document.getElementById('editCoachChallengeLevel').value;
+            coach.expertise = document.getElementById('editCoachExpertise').value;
+            coach.industry = document.getElementById('editCoachIndustry').value;
+            coach.yearsExperience = document.getElementById('editCoachYearsExperience').value;
+            coach.certification = document.getElementById('editCoachCertification').value;
+            coach.maxClients = document.getElementById('editCoachMaxClients').value;
+            coach.currentClients = document.getElementById('editCoachCurrentClients').value;
+
+            // Validate required fields
+            if (!coach.name) {
+                alert('Coach name is required.');
+                return;
+            }
+
+            // Save updated coaches
+            saveCoaches(coaches);
+            
+            // Refresh the display
+            renderCoachDirectory();
+            
+            // Close modal
+            closeEditModal();
+            
+            alert('Coach updated successfully!');
+        }
+
+        // Handle form submission
+        document.getElementById('editCoachForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveEditedCoach();
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('editModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditModal();
+            }
+        });
 
         function updateImportance(sliderId, valueId) {
             const slider = document.getElementById(sliderId);
