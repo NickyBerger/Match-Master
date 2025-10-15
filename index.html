@@ -336,6 +336,125 @@
             padding-bottom: 5px;
         }
 
+        .coach-item {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .coach-item:hover {
+            border-color: #4a9eff;
+            box-shadow: 0 2px 8px rgba(74, 158, 255, 0.1);
+        }
+
+        .coach-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            cursor: pointer;
+            background: #ffffff;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .coach-header:hover {
+            background: #f8f9fa;
+        }
+
+        .coach-basic-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .coach-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .coach-summary {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .coach-availability {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .available {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .not-available {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .availability-icon {
+            font-size: 1rem;
+        }
+
+        .coach-details {
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            display: none;
+        }
+
+        .coach-details.expanded {
+            display: block;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .detail-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            font-size: 0.9rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .expand-icon {
+            font-size: 1.2rem;
+            color: #666;
+            transition: transform 0.3s ease;
+        }
+
+        .expand-icon.expanded {
+            transform: rotate(180deg);
+        }
+
         @media (max-width: 1400px) {
             .main-content {
                 grid-template-columns: 1fr 1fr;
@@ -1002,28 +1121,89 @@
 
             let html = '';
             coaches.forEach((c, idx) => {
+                const currentClients = parseInt(c.currentClients) || 0;
+                const maxClients = parseInt(c.maxClients) || 0;
+                const isAvailable = maxClients > currentClients;
+                
+                const summary = `${c.expertise || 'General'} · ${c.industry || 'Various Industries'} · ${c.yearsExperience || 'Unknown Experience'}`;
+                
                 html += `
-                    <div class="match-result" style="margin-top:10px;">
-                        <div class="match-header">
-                            <div class="coach-name">${c.name}</div>
-                            <div>
-                                <button class="match-button" style="width:auto; padding:6px 10px; background:linear-gradient(135deg,#dc3545 0%, #c82333 100%);" onclick="deleteCoachAt(${idx})">Delete</button>
+                    <div class="coach-item">
+                        <div class="coach-header" onclick="toggleCoachDetails(${idx})">
+                            <div class="coach-basic-info">
+                                <div>
+                                    <div class="coach-name">${c.name}</div>
+                                    <div class="coach-summary">${summary}</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <div class="coach-availability ${isAvailable ? 'available' : 'not-available'}">
+                                    <span class="availability-icon">${isAvailable ? '✓' : '✗'}</span>
+                                    <span>${isAvailable ? 'Available for Coaching' : 'Not Available for Coaching'}</span>
+                                </div>
+                                <span class="expand-icon" id="expandIcon${idx}">▼</span>
                             </div>
                         </div>
-                        <div class="match-details">
-                            <strong>Comm:</strong> ${c.communication || '-'} ·
-                            <strong>Method:</strong> ${c.methodology || '-'} ·
-                            <strong>Challenge:</strong> ${c.challengeLevel || '-'} ·
-                            <strong>Expertise:</strong> ${c.expertise || '-'} ·
-                            <strong>Industry:</strong> ${c.industry || '-'} ·
-                            <strong>Years Exp:</strong> ${c.yearsExperience || '-'} ·
-                            <strong>Cert:</strong> ${c.certification || '-'} ·
-                            <strong>Availability:</strong> ${c.currentClients || '-'}/${c.maxClients || '-'}
+                        <div class="coach-details" id="coachDetails${idx}">
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <div class="detail-label">Communication Style</div>
+                                    <div class="detail-value">${c.communication || 'Not specified'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Methodology</div>
+                                    <div class="detail-value">${c.methodology || 'Not specified'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Challenge Level</div>
+                                    <div class="detail-value">${c.challengeLevel || 'Not specified'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Primary Expertise</div>
+                                    <div class="detail-value">${c.expertise || 'Not specified'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Industry Background</div>
+                                    <div class="detail-value">${c.industry || 'Not specified'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Years of Experience</div>
+                                    <div class="detail-value">${c.yearsExperience || 'Not specified'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Certification</div>
+                                    <div class="detail-value">${c.certification || 'Not specified'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Current Clients</div>
+                                    <div class="detail-value">${c.currentClients || 'Not specified'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Max Clients</div>
+                                    <div class="detail-value">${c.maxClients || 'Not specified'}</div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 15px; text-align: right;">
+                                <button class="match-button" style="width:auto; padding:6px 10px; background:linear-gradient(135deg,#dc3545 0%, #c82333 100%);" onclick="event.stopPropagation(); deleteCoachAt(${idx})">Delete Coach</button>
+                            </div>
                         </div>
                     </div>
                 `;
             });
             container.innerHTML = html;
+        }
+
+        function toggleCoachDetails(index) {
+            const details = document.getElementById(`coachDetails${index}`);
+            const icon = document.getElementById(`expandIcon${index}`);
+            
+            if (details.classList.contains('expanded')) {
+                details.classList.remove('expanded');
+                icon.classList.remove('expanded');
+            } else {
+                details.classList.add('expanded');
+                icon.classList.add('expanded');
+            }
         }
 
         function updateImportance(sliderId, valueId) {
