@@ -11,28 +11,57 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e0e0e0;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+            --accent-color: #4a9eff;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2a2a2a;
+            --bg-tertiary: #3a3a3a;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --border-color: #404040;
+            --accent-color: #4a9eff;
+            --shadow: rgba(0,0,0,0.3);
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
             min-height: 100vh;
             padding: 15px;
+            transition: background 0.3s ease;
+        }
+
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%);
         }
 
         .container {
             max-width: 1600px;
             margin: 0 auto;
-            background: #ffffff;
+            background: var(--bg-primary);
             border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px var(--shadow);
             overflow: hidden;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
         .header {
-            background: #ffffff;
-            color: #333;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             padding: 0;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
         .header-top {
@@ -47,7 +76,7 @@
             font-size: 2.2rem;
             font-weight: 600;
             font-family: 'Georgia', serif;
-            color: #d32f2f;
+            color: #4a9eff;
             letter-spacing: 1px;
         }
 
@@ -57,18 +86,61 @@
             gap: 30px;
         }
 
-        .header-nav a {
+        .theme-toggle {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
             color: #333;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle:hover {
+            background: #f0f0f0;
+            border-color: #4a9eff;
+        }
+
+        .theme-toggle.dark {
+            background: #333;
+            color: white;
+            border-color: #555;
+        }
+
+        .theme-toggle.dark:hover {
+            background: #444;
+            border-color: #4a9eff;
+        }
+
+        .nav-button {
+            background: none;
+            border: none;
+            color: var(--text-primary);
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 4px;
         }
 
-        .header-nav a:hover {
-            color: #d32f2f;
+        .nav-button:hover {
+            color: var(--accent-color);
+            background: var(--bg-secondary);
+        }
+
+        .nav-button.active {
+            color: var(--accent-color);
+            background: var(--bg-secondary);
+            font-weight: 600;
         }
 
         .header-main {
@@ -334,7 +406,7 @@
         }
 
         .trait-category h3 {
-            color: #d32f2f;
+            color: #4a9eff;
             margin-bottom: 15px;
             font-size: 1.2rem;
             font-weight: 600;
@@ -541,6 +613,31 @@
             color: #666;
         }
 
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        .clients-section {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px;
+            box-shadow: 0 4px 15px var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .clients-section h2 {
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+
         @media (max-width: 1400px) {
             .main-content {
                 grid-template-columns: 1fr 1fr;
@@ -612,10 +709,12 @@
             <div class="header-top">
                 <div class="header-logo">Match Master</div>
                 <div class="header-nav">
-                    <a href="#coaches">Coaches</a>
-                    <a href="#about">About</a>
-                    <a href="#contact">Contact</a>
-                    <a href="#signin">Sign In</a>
+                    <button class="nav-button active" onclick="showView('coaches')">Coaches</button>
+                    <button class="nav-button" onclick="showView('clients')">Clients</button>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <span id="themeIcon">🌙</span>
+                        <span id="themeText">Dark</span>
+                    </button>
                 </div>
             </div>
             <div class="header-main">
@@ -624,7 +723,8 @@
             </div>
         </div>
 
-        <div class="main-content">
+        <div class="view-section active" id="coachesView">
+            <div class="main-content">
             <div class="form-section">
                 <h2>Client Profile</h2>
                 <div class="form-group">
@@ -743,6 +843,11 @@
                             </select>
                         </div>
                     </div>
+                </div>
+
+                <div style="display:flex; gap:8px; margin-top:15px;">
+                    <button class="match-button" style="width:auto; padding:6px 12px;" onclick="addClientToDirectory()">➕ Add Client to Directory</button>
+                    <button class="match-button" style="width:auto; padding:6px 12px; background:linear-gradient(135deg,#6c757d 0%, #868e96 100%);" onclick="clearClientForm()">🧹 Clear Form</button>
                 </div>
             </div>
 
@@ -987,6 +1092,15 @@
         <div class="results-section" id="resultsSection" style="display: none;">
             <h2>Executive Match Results</h2>
             <div id="matchResults"></div>
+        </div>
+            </div>
+        </div>
+
+        <div class="view-section" id="clientsView">
+            <div class="clients-section">
+                <h2>Client Directory</h2>
+                <div id="clientList"></div>
+            </div>
         </div>
     </div>
 
@@ -1759,6 +1873,173 @@
 
             // Scroll to results
             resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // View switching functionality
+        function showView(viewName) {
+            // Hide all views
+            document.querySelectorAll('.view-section').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected view
+            document.getElementById(viewName + 'View').classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Render appropriate content
+            if (viewName === 'coaches') {
+                renderCoachDirectory();
+            } else if (viewName === 'clients') {
+                renderClientDirectory();
+            }
+        }
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light';
+            }
+        }
+
+        // Client management
+        const CLIENT_STORAGE_KEY = 'clientDirectoryV1';
+
+        function loadClients() {
+            try {
+                const raw = localStorage.getItem(CLIENT_STORAGE_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveClients(clients) {
+            localStorage.setItem(CLIENT_STORAGE_KEY, JSON.stringify(clients));
+        }
+
+        function addClientToDirectory() {
+            const client = {
+                name: document.getElementById('clientName').value.trim(),
+                communication: getTraitValue('clientCommunication'),
+                decisionMaking: getTraitValue('clientDecisionMaking'),
+                riskTolerance: getTraitValue('clientRiskTolerance'),
+                challenge: getTraitValue('clientChallenge'),
+                seniority: getTraitValue('clientSeniority'),
+                industry: getTraitValue('clientIndustry'),
+                intensity: getTraitValue('clientIntensity'),
+                addedDate: new Date().toISOString()
+            };
+
+            if (!client.name) {
+                alert('Please enter a client name before adding to the directory.');
+                return;
+            }
+
+            const list = loadClients();
+            list.push(client);
+            saveClients(list);
+            renderClientDirectory();
+            alert('Client added to directory.');
+        }
+
+        function renderClientDirectory() {
+            const container = document.getElementById('clientList');
+            const clients = loadClients();
+            
+            if (clients.length === 0) {
+                container.innerHTML = '<div class="no-results">No clients saved yet. Add clients using the form above.</div>';
+                return;
+            }
+
+            let html = '';
+            clients.forEach((client, idx) => {
+                html += `
+                    <div class="coach-item">
+                        <div class="coach-header">
+                            <div class="coach-basic-info">
+                                <div>
+                                    <div class="coach-name">${client.name}</div>
+                                    <div class="coach-summary">${client.seniority || 'Unknown Level'} · ${client.industry || 'Various Industries'} · ${client.challenge || 'General Focus'}</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <span style="font-size: 0.8rem; color: var(--text-secondary);">Added: ${new Date(client.addedDate).toLocaleDateString()}</span>
+                                <button class="match-button" style="width:auto; padding:6px 10px; background:linear-gradient(135deg,#dc3545 0%, #c82333 100%);" onclick="deleteClientAt(${idx})">Delete</button>
+                            </div>
+                        </div>
+                        <div class="coach-details" style="display: block;">
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <div class="detail-label">Communication Style</div>
+                                    <div class="detail-value">${client.communication || 'Not specified'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Decision Making</div>
+                                    <div class="detail-value">${client.decisionMaking || 'Not specified'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Risk Tolerance</div>
+                                    <div class="detail-value">${client.riskTolerance || 'Not specified'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Primary Challenge</div>
+                                    <div class="detail-value">${client.challenge || 'Not specified'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Seniority Level</div>
+                                    <div class="detail-value">${client.seniority || 'Not specified'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Industry Background</div>
+                                    <div class="detail-value">${client.industry || 'Not specified'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Coaching Intensity</div>
+                                    <div class="detail-value">${client.intensity || 'Not specified'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function deleteClientAt(index) {
+            const list = loadClients();
+            list.splice(index, 1);
+            saveClients(list);
+            renderClientDirectory();
+        }
+
+        function clearClientForm() {
+            const ids = [
+                'clientName','clientCommunication','clientDecisionMaking','clientRiskTolerance',
+                'clientChallenge','clientSeniority','clientIndustry','clientIntensity'
+            ];
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (el.tagName === 'INPUT') el.value = '';
+                if (el.tagName === 'SELECT') el.selectedIndex = 0;
+            });
         }
 
         // Initialize
